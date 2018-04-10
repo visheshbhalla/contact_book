@@ -4,6 +4,9 @@ import resources
 from mock import patch
 from pyramid import testing
 from resources import Root, Contacts, Contact
+import pyramid
+from pyramid import paster
+import uuid
 
 @patch('contact_book.resources.Contacts')
 @patch('contact_book.resources.Contact')
@@ -60,31 +63,28 @@ class HelloWorldViewTests(unittest.TestCase):
         response = inst.delete_contact()
         self.assertEqual(response.status, '202 Accepted')
 
-        #self.assertIn(b'Visit', response.body)
 
-    #def test_retrieve(self):
-
-    
-    """def test_hello(self):
-        from .views import hello
-
-        request = testing.DummyRequest()
-        response = hello(request)
-        self.assertEqual(response.status_code, 200)
-        #self.assertIn(b'Go back', response.body)"""
-
-"""class HelloWorldFunctionalTests(unittest.TestCase):
+"""
+Functional tests were working in Test environment
+but they are not working here.
+There is some issue which I'm not able to figure out.
+"""
+class ContactBookFunctionalTests(unittest.TestCase):
+        
     def setUp(self):
-        from hello_world import main
-        app = main({})
+        print 'a'
+        app = paster.get_app('development.ini')
         from webtest import TestApp
-
         self.testapp = TestApp(app)
 
-    def test_home(self):
-        res = self.testapp.get('/', status=200)
-        self.assertIn(b'<body>Visit', res.body)
-
-    def test_hello(self):
-        res = self.testapp.get('/howdy', status=200)
-        self.assertIn(b'<body>Go back', res.body)"""
+    def test_it(self):
+        email_address=str(uuid.uuid1())
+        """res = self.testapp.get('/', status=200)
+        self.assertIn(b'Contact', res.body)"""
+        res = self.testapp.get('/contacts', status=200)
+        self.assertIn(b'contact_name', res.body)
+        res = self.testapp.get('/contacts/abc@xyz.com', status=200)
+        self.assertIn(b'contact_name', res.body)
+        res = self.testapp.post_json('/contacts',dict(contact_name='name1', email_address=email_address))
+        self.assertIn(b'201', res.status)
+        
