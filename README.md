@@ -30,9 +30,10 @@ Rest APIs for contact_book app
   ```
   $cd contact_book
   ```
-5. Run setup.py
+5. Run setup.py with install and develop
   ```
   $../ENV/bin/python setup.py install
+  $../ENV/bin/python setup.py develop
   ```
 6. Run the application using below command
   ```
